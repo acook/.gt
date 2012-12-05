@@ -8,26 +8,29 @@ fi
 
 # Set up our directories, I suggest $HOME/.gt for this script and $HOME/.gt/scripts for the others
 gt_dir=$HOME/.gt
-script_dir=$gt_dir/scripts
+gt_script_dir=$gt_dir/scripts
 
-function find_script { find $script_dir -name "$1.*" 2> /dev/null | head -1; }
-script=$(find_script $1)
+function find_script { find $gt_script_dir -name "$1.*" 2> /dev/null | head -1; }
+gt_script=$(find_script $1)
 
 # If the script is found, then run it
-if [ -e "$script" ]; then
+if [ -e "$gt_script" ]; then
 
   error_log=$gt_dir/logs/$1.stderr
 
-  filename=$(basename "$script")
+  filename=$(basename "$gt_script")
   extension="${filename##*.}"
 
   if [ "$extension" == "bash" ]; then
     executor=bash
   elif [ "$extension" == "rb" ]; then
+    # attempt to load RVM, just in case
+    [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+
     executor=ruby
   fi
 
-  output=$($executor $script 2> $error_log)
+  output=$($executor $gt_script 2> $error_log)
 
   if [ -n "$output" ]; then
     echo $output
@@ -36,5 +39,5 @@ if [ -e "$script" ]; then
   fi
 
 else
-  echo "\!\!\! - File not found: $script"
+  echo "\!\!\! - File not found: $gt_script"
 fi
