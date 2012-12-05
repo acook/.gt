@@ -17,7 +17,17 @@ script=$(find_script $1)
 if [ -e "$script" ]; then
 
   error_log=$gt_dir/logs/$1.stderr
-  output=$(bash $script 2> $error_log)
+
+  filename=$(basename "$script")
+  extension="${filename##*.}"
+
+  if [ "$extension" == "bash" ]; then
+    executor=bash
+  elif [ "$extension" == "rb" ]; then
+    executor=ruby
+  fi
+
+  output=$($executor $script 2> $error_log)
 
   if [ -n "$output" ]; then
     echo $output
