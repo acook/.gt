@@ -1,17 +1,30 @@
 #!/usr/bin/env bash
 
-gtdir=~/.gt
-script=$gtdir/scripts/%1.bash
-errorfile=$gtdir/%1.stderr
+# Exit with error if it doesn't recieve a script name on the commandline
+if [ -z "$1" ]; then
+  echo \!\!\! - No script name provided
+  exit 255
+fi
 
-if script exists; then
-  output=$(bash $script 2>$errorfile)
+# Set up our directories, I suggest $HOME/.gt for this script and $HOME/.gt/scripts for the others
+gt_dir=$HOME/.gt
+script_dir=$gt_dir/scripts
 
-  if output; then
-    echo output
+function find_script { find . -name "$1.*" 2> /dev/null | head -1; }
+script=$(find_script $1)
+
+# If the script is found, then run it
+if [ -e "$script" ]; then
+
+  error_log=$gt_dir/$1.stderr
+  output=$(bash $script 2> $error_log)
+
+  if [ -n "$output" ]; then
+    echo $output
   else
-    echo \!\!\! - no output
-    
+    echo \!\!\! - No output, check error log: $error_log
+  fi
+
 else
-  echo "file not found: $script"
+  echo "\!\!\! - File not found: $script"
 fi
