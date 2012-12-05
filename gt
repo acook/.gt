@@ -10,7 +10,7 @@ fi
 gt_dir=$HOME/.gt
 script_dir=$gt_dir/scripts
 
-function find_script { find . -name "$1.*" 2> /dev/null | head -1; }
+function find_script { find $script_dir -name "$1.*" 2> /dev/null | head -1; }
 script=$(find_script $1)
 
 # If the script is found, then run it
