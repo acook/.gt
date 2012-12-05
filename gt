@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+gtdir=~/.gt
+script=$gtdir/scripts/%1.bash
+errorfile=$gtdir/%1.stderr
+
+if script exists; then
+  output=$(bash $script 2>$errorfile)
+
+  if output; then
+    echo output
+  else
+    echo \!\!\! - no output
+    
+else
+  echo "file not found: $script"
+fi
