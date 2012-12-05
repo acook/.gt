@@ -16,7 +16,7 @@ script=$(find_script $1)
 # If the script is found, then run it
 if [ -e "$script" ]; then
 
-  error_log=$gt_dir/$1.stderr
+  error_log=$gt_dir/logs/$1.stderr
   output=$(bash $script 2> $error_log)
 
   if [ -n "$output" ]; then
