@@ -1,9 +1,10 @@
 require 'nokogiri'
 require 'open-uri'
+require 'json'
 
 class Weather
   def display
-    "Current Conditions: #{conditions}, #{temperature} #{unit_symbol}"
+    "#{conditions}, #{temperature} #{unit_symbol}"
   end
 
   def url
@@ -43,7 +44,7 @@ class Weather
   end
 
   def zip_code
-    94105
+    get_zip || 94105
   end
 
   def unit
@@ -53,6 +54,16 @@ class Weather
   def unit_symbol
     #"\u2109"
     "\u00B0#{unit.upcase}"
+  end
+
+  def get_zip
+    geocode = JSON.parse open('http://freegeoip.net/json/').read
+    zipcode = geocode['zipcode']
+    zipcode.empty? ? nil : zipcode
+  end
+
+  def ip
+    open('http://ifconfig.me/ip').read.chomp
   end
 end
 
