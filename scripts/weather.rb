@@ -4,7 +4,7 @@ require 'json'
 
 class Weather
   def display
-    "#{conditions}, #{temperature} #{unit_symbol}"
+    "#{conditions}, #{temperature} #{unit_symbol}" + (show_location? ? "in #{location}" : '')
   end
 
   def url
@@ -47,19 +47,34 @@ class Weather
     get_zip || 94105
   end
 
+  def show_location?
+    false
+  end
+
+  def location
+    get_location || 'San Francisco'
+  end
+
   def unit
     'f'
   end
 
   def unit_symbol
-    #"\u2109"
-    "\u00B0#{unit.upcase}"
+    "\u2109"
+    #"\u00B0#{unit.upcase}"
   end
 
   def get_zip
-    geocode = JSON.parse open('http://freegeoip.net/json/').read
     zipcode = geocode['zipcode']
     zipcode.empty? ? nil : zipcode
+  end
+
+  def get_location
+    "#{geocode['city']}, #{geocode['region_code']}" if get_zip
+  end
+
+  def geocode
+    @geocode ||= JSON.parse open('http://freegeoip.net/json/').read
   end
 
   def ip
