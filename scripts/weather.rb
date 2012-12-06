@@ -5,7 +5,7 @@ require 'json'
 module YahooWeather
   class << self
     def display
-      "#{conditions}, #{temperature} #{unit_symbol}" + (show_location? ? "in #{location}" : '')
+      "#{conditions}, #{temperature}#{unit_symbol}" + (show_location? ? "in #{location}" : '')
     end
 
     def url
