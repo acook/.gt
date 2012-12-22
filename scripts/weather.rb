@@ -14,8 +14,8 @@ module YahooWeather
 
     protected
 
-    def parse
-      doc = Nokogiri::XML get
+    def parse xml
+      doc = Nokogiri::XML xml
       item = doc.css('rss channel item')
       item.children.find {|node| node.name == 'condition'}
     end
@@ -32,12 +32,13 @@ module YahooWeather
       unless reload || !@weather then
         @weather
       else
-        @weather = parse
+        xml = get url
+        @weather = parse xml
       end
     end
 
-    def get
-      open url
+    def get address
+      open address
     end
 
     def url_for_site
