@@ -26,6 +26,7 @@ if [ -e "$gt_script" ]; then
   elif [ "$extension" == "rb" ]; then
     # attempt to load RVM, just in case
     [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+    source $gt_dir/.rvmrc
 
     executor=ruby
   fi
